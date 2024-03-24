@@ -9,7 +9,7 @@
         android:id="@+id/menu_tab_home"
         android:name="feature.home.Homefragment"
         android:label="fragment_homefragment"
-        tools:layout="@layout/fragment_homefragment" />
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/menu_tab_cart"
         android:name="feature.cart.CartFragment"

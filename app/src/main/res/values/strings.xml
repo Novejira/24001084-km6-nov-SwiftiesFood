@@ -3,4 +3,10 @@
     <string name="title_tab_home">Home</string>
     <string name="title_tab_cart">Cart</string>
     <string name="title_tab_profile">Profile</string>
+    <string name="text_home">Home</string>
+    <string name="text_title_banner">Diskon 100%</string>
+    <string name="text_desc_banner">If you are Swifties</string>
+    <string name="text_grid_mode">Grid Mode</string>
+    <string name="text_list_mode">List Mode</string>
+    <string name="text_list_menu_available">List menu available</string>
 </resources>

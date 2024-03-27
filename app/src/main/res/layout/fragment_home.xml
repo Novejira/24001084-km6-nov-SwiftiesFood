@@ -33,7 +33,7 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/layout_banner"
-        tools:listitem="@layout/item_category" />
+        tools:listitem="@layout/item_category_menu" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -66,7 +66,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_food_list"
         android:layout_width="match_parent"
-        android:layout_marginVertical="8dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_change_list_mode"

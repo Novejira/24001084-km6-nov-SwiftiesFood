@@ -9,8 +9,9 @@
     <string name="text_grid_mode">Grid Mode</string>
     <string name="text_list_mode">List Mode</string>
     <string name="text_list_menu_available">List menu available</string>
-    <string name="text_number_phone">Number Phone</string>
-    <string name="text_email">Email</string>
+    <string name="text_add_to_cart">Add To Cart</string>
     <string name="text_username">Username</string>
+    <string name="text_email">Email</string>
+    <string name="text_number_phone">Number Phone</string>
     <string name="text_profile">Profile</string>
 </resources>

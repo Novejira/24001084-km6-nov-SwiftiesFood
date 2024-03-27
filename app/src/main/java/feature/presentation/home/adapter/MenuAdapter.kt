@@ -1,4 +1,4 @@
-package com.catnip.layoutingexample.layoutingexample.presentation.foodlist.adapter
+package feature.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,13 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.berkah.swiftiesfood.databinding.ItemFoodGridBinding
 import com.berkah.swiftiesfood.databinding.ItemFoodListBinding
-import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodGridItemViewHolder
-import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodListItemViewHolder
 import feature.base.ViewHolderBinder
-import feature.data.model.Catalog
+import feature.data.model.Menu
 
-class FoodAdapter(
-    private val listener: OnItemClickedListener<Catalog>,
+class MenuAdapter(
+    private val listener: OnItemClickedListener<Menu>,
     private val listMode: Int = MODE_LIST
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -24,13 +22,13 @@ class FoodAdapter(
     }
 
     private var asyncDataDiffer = AsyncListDiffer(
-        this, object : DiffUtil.ItemCallback<Catalog>() {
-            override fun areItemsTheSame(oldItem: Catalog, newItem: Catalog): Boolean {
+        this, object : DiffUtil.ItemCallback<Menu>() {
+            override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
                 //membandingkan apakah item tersebut sama
                 return oldItem.name == newItem.name
             }
 
-            override fun areContentsTheSame(oldItem: Catalog, newItem: Catalog): Boolean {
+            override fun areContentsTheSame(oldItem: Menu, newItem: Menu): Boolean {
                 // yang dibandingkan adalah kontennya
                 return oldItem.hashCode() == newItem.hashCode()
             }
@@ -38,20 +36,20 @@ class FoodAdapter(
         }
     )
 
-    fun submitData(data: List<Catalog>) {
+    fun submitData(data: List<Menu>) {
         asyncDataDiffer.submitList(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //membuat instance of view holder
-        return if (listMode == MODE_GRID) FoodGridItemViewHolder(
+        return if (listMode == MODE_GRID) MenuGridItemViewHolder(
             ItemFoodGridBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             ), listener
         ) else {
-            FoodListItemViewHolder(
+            MenuListItemViewHolder(
                 ItemFoodListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -65,7 +63,7 @@ class FoodAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder !is ViewHolderBinder<*>) return
-        (holder as ViewHolderBinder<Catalog>).bind(asyncDataDiffer.currentList[position])
+        (holder as ViewHolderBinder<Menu>).bind(asyncDataDiffer.currentList[position])
     }
 }
 

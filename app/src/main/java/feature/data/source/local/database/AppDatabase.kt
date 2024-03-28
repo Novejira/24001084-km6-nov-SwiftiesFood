@@ -1,9 +1,10 @@
-package feature.data.source.local
+package feature.data.source.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import feature.data.source.entity.CartEntity
 import feature.data.source.local.dao.CartDao
 
 

@@ -1,6 +1,6 @@
 package feature.data.datasource.cart
 
-import feature.data.source.local.CartEntity
+import feature.data.source.entity.CartEntity
 import feature.data.source.local.dao.CartDao
 import kotlinx.coroutines.flow.Flow
 

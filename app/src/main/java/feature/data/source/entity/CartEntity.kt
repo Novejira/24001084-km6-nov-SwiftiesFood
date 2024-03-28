@@ -1,4 +1,4 @@
-package feature.data.source.local
+package feature.data.source.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

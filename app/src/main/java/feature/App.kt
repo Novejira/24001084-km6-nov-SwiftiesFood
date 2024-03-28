@@ -1,7 +1,7 @@
 package feature
 
 import android.app.Application
-import feature.data.source.local.AppDatabase
+import feature.data.source.local.database.AppDatabase
 
 class App : Application (){
 

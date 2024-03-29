@@ -1,8 +1,11 @@
 package feature.data.utils
 
+import android.graphics.Rect
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class GridSpacingItemDecoration(spanCount:Int,spacing:Int,includeEdge:Boolean):ItemDecoration() /*{
+class GridSpacingItemDecoration(spanCount:Int,spacing:Int,includeEdge:Boolean):ItemDecoration() {
     private val spanCount: Int
     private val spacing: Int
     private val includeEdge: Boolean
@@ -38,4 +41,5 @@ class GridSpacingItemDecoration(spanCount:Int,spacing:Int,includeEdge:Boolean):I
                 outRect.top = spacing // item top
             }
         }
-    }*/
+    }
+}

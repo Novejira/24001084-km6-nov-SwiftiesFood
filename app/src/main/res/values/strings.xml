@@ -14,4 +14,23 @@
     <string name="text_email">Email</string>
     <string name="text_number_phone">Number Phone</string>
     <string name="text_profile">Profile</string>
+    <string name="text_add_to_cart_success">Add to cart Success</string>
+    <string name="add_to_cart_failed">Add to cart failed</string>
+    <string name="loading">Loading</string>
+    <string name="text_title_order_confirmation">Order Confirmation</string>
+    <string name="text_total_price">Total Price</string>
+    <string name="text_order">Order</string>
+    <string name="text_delivery_method">Delivery Method</string>
+    <string name="text_pick_up">Pick Up</string>
+    <string name="text_delivery">Delivery</string>
+    <string name="text_payment_method">Payment Method</string>
+    <string name="text_e_wallet">E-Wallet</string>
+    <string name="text_cash">Cash</string>
+    <string name="shopping_summary">Shopping summary</string>
+    <string name="text_title_your_cart">Your Cart</string>
+    <string name="total_quantity">x%s</string>
+    <string name="text_hint_notes">Notes</string>
+    <string name="text_cart_is_empty">Cart is Empty</string>
+    <string name="text_okay">Okay</string>
+
 </resources>

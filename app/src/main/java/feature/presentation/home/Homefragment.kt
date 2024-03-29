@@ -6,28 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.FragmentHomeBinding
 import feature.data.datasource.category.DummyCategoryDataSource
 import feature.data.datasource.menu.DummyMenuDataSource
+import feature.data.model.Category
 import feature.data.model.Menu
 import feature.data.repository.CategoryRepository
 import feature.data.repository.CategoryRepositoryImpl
 import feature.data.repository.MenuRepository
 import feature.data.repository.MenuRepositoryImpl
 import feature.data.utils.GenericViewModelFactory
+import feature.data.utils.GridSpacingItemDecoration
 import feature.presentation.detailfood.DetailFoodActivity
-import feature.presentation.home.adapter.MenuAdapter
-import feature.presentation.home.adapter.OnItemClickedListener
+import feature.presentation.home.adapter.CategoryListAdapter
+import feature.presentation.home.adapter.MenuListAdapter
 
 
 class Homefragment : Fragment() {
 
 
     private lateinit var binding: FragmentHomeBinding
-    private var adapter: MenuAdapter?=null
-    private var isUsingGridMode:Boolean = false
 
     private val viewModel:HomeViewModel by viewModels {
         val menuDataSource = DummyMenuDataSource()
@@ -37,6 +35,17 @@ class Homefragment : Fragment() {
         GenericViewModelFactory.create(HomeViewModel(categoryRepository,menuRepository))
 
     }
+    private val categoryAdapter: CategoryListAdapter by lazy {
+        CategoryListAdapter {
+
+        }
+    }
+    private val menuAdapter: MenuListAdapter by lazy {
+        MenuListAdapter {
+            DetailFoodActivity.startActivity(requireContext(), it)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,46 +57,21 @@ class Homefragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getCategories()
-        setClickAction()
+        bindCategoryList(viewModel.getCategories())
+        bindMenuList(viewModel.getMenus())
     }
-    private fun setClickAction() {
-        binding.btnChangeListMode.setOnClickListener {
-            isUsingGridMode = !isUsingGridMode
-            setButtonText(isUsingGridMode)
-            bindFoodList(isUsingGridMode)
+    private fun bindCategoryList(data: List<Category>) {
+        binding.rvCategory.apply {
+            adapter = categoryAdapter
         }
+        categoryAdapter.submitData(data)
     }
-    private fun setButtonText(usingGridMode: Boolean) {
-        val textResId = if (usingGridMode) R.string.text_list_mode else R.string.text_grid_mode
-        binding.btnChangeListMode.setText(textResId)
-    }
-    private fun bindFoodList(isUsingGrid: Boolean) {
-        val listMode = if (isUsingGrid) MenuAdapter.MODE_GRID else MenuAdapter.MODE_LIST
-        adapter = MenuAdapter (
-            listMode = listMode,
-            listener = object : OnItemClickedListener<Menu> {
-                override fun onItemClicked(item: Menu) {
-                    //navigate to detail
-                    navigateToMenu(item)
-                }
-            })
-        binding.rvFoodList.apply {
-            adapter = this@Homefragment.adapter
-            layoutManager = GridLayoutManager(requireContext(), if (isUsingGrid) 2 else 1)
+    private fun bindMenuList(data: List<Menu>) {
+        val itemDecoration = GridSpacingItemDecoration(2, 12, true)
+        binding.rvMenuList.apply {
+            adapter = menuAdapter
+            addItemDecoration(itemDecoration)
         }
-        adapter?.submitData(viewModel.getMenus())
-    }
-    private fun navigateToMenu(item: Menu) {
-        DetailFoodActivity.startActivity(requireContext(),
-            Menu(
-                name = "Boba",
-                imgURL = "https://raw.githubusercontent.com/Novejira/SwiftiesFoodAsset/main/menu/img_boba.jpeg",
-                desc = "Ada Bulat bulat ",
-                price = 15.000,
-                addres = "Jl. Ruko Anggrek 1 No.18 Blok C1, Tirtajaya, Kec. Sukmajaya, Kota Depok, Jawa Barat 16412",
-                mapURL = "https://maps.app.goo.gl/h4wQKqaBuXzftGK77"
-           ),
-        )
+        menuAdapter.submitData(data)
     }
 }

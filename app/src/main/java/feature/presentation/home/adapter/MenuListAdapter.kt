@@ -1,4 +1,4 @@
-package com.catnip.layoutingexample.layoutingexample.presentation.foodlist.adapter
+package feature.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,46 +10,50 @@ import com.berkah.swiftiesfood.databinding.ItemFoodListBinding
 import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodGridItemViewHolder
 import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodListItemViewHolder
 import feature.base.ViewHolderBinder
-import feature.data.model.Catalog
+import feature.data.model.Menu
 
-class FoodAdapter(
-    private val listener: OnItemClickedListener<Catalog>,
+class MenuListAdapter (
+    private val listener : OnItemClickedListener<Menu>,
     private val listMode: Int = MODE_LIST
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object {
+    companion object{
         const val MODE_LIST = 0
         const val MODE_GRID = 1
     }
 
-    private var asyncDataDiffer = AsyncListDiffer(
-        this, object : DiffUtil.ItemCallback<Catalog>() {
-            override fun areItemsTheSame(oldItem: Catalog, newItem: Catalog): Boolean {
-                //membandingkan apakah item tersebut sama
-                return oldItem.name == newItem.name
+    private val dataDiffer =
+        AsyncListDiffer(
+            this,
+            object : DiffUtil.ItemCallback<Menu>() {
+                override fun areItemsTheSame(
+                    oldItem: Menu,
+                    newItem: Menu
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: Menu,
+                    newItem: Menu
+                ): Boolean {
+                    return oldItem.hashCode() == newItem.hashCode()
+                }
             }
+        )
 
-            override fun areContentsTheSame(oldItem: Catalog, newItem: Catalog): Boolean {
-                // yang dibandingkan adalah kontennya
-                return oldItem.hashCode() == newItem.hashCode()
-            }
-
-        }
-    )
-
-    fun submitData(data: List<Catalog>) {
-        asyncDataDiffer.submitList(data)
+    fun submitData(data: List<Menu>) {
+        dataDiffer.submitList(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        //membuat instance of view holder
+
         return if (listMode == MODE_GRID) FoodGridItemViewHolder(
             ItemFoodGridBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ), listener
+            ),listener
         ) else {
             FoodListItemViewHolder(
                 ItemFoodListBinding.inflate(
@@ -61,14 +65,15 @@ class FoodAdapter(
         }
     }
 
-    override fun getItemCount(): Int = asyncDataDiffer.currentList.size
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder !is ViewHolderBinder<*>) return
-        (holder as ViewHolderBinder<Catalog>).bind(asyncDataDiffer.currentList[position])
+        (holder as ViewHolderBinder<Menu>).bind(dataDiffer.currentList[position])
     }
-}
 
-interface OnItemClickedListener<T> {
-    fun onItemClicked(item: T)
+    override fun getItemCount(): Int = dataDiffer.currentList.size
+
+
+    interface OnItemClickedListener<T>{
+        fun onItemClicked(item: T)
+    }
 }

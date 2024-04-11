@@ -2,6 +2,7 @@ package feature.checkout
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -10,6 +11,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.berkah.swiftiesfood.R
 import feature.data.repository.CartRepository
+import feature.presentation.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,6 +33,10 @@ class CheckoutViewModel (private val cartRepository: CartRepository) : ViewModel
 
             dialog.dismiss()
             deleteAllCart()
+
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("fragment_to_load", "home") // Mengirimkan informasi fragment yang akan dimuat
+            context.startActivity(intent)
 
         }
         dialog.show()

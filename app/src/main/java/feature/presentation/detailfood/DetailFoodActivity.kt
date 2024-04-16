@@ -2,7 +2,6 @@ package feature.presentation.detailfood
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -79,7 +78,7 @@ class DetailFoodActivity : AppCompatActivity() {
 
     private fun bindMenu(menu: Menu?) {
         menu?.let { item ->
-            binding.ivPhotoFood.load(item.imgURL) {
+            binding.ivPhotoFood.load(item.imgUrl) {
                 crossfade(true)
             }
             binding.tvNameFood.text = item.name
@@ -87,9 +86,9 @@ class DetailFoodActivity : AppCompatActivity() {
             binding.tvFoodPrice.text = item.price.toIndonesianFormat()
             binding.tvDescLoca.text = item.addres
             binding.tvDescLoca.setOnClickListener {
-                val i= Intent(Intent.ACTION_VIEW)
-                i.setData(Uri.parse(menu.mapURL))
-                startActivity(i)
+               // val i= Intent(Intent.ACTION_VIEW)
+                //i.setData(Uri.parse(menu.mapURL))
+                //startActivity(i)
             }
         }
     }

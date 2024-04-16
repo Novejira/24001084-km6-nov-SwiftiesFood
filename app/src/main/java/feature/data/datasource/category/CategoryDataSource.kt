@@ -1,7 +1,7 @@
 package feature.data.datasource.category
 
-import feature.data.model.Category
+import feature.data.source.network.CategoriesResponse
 
 interface CategoryDataSource {
-    fun getCategories(): List<Category>
+    suspend fun getCategories(): CategoriesResponse
 }

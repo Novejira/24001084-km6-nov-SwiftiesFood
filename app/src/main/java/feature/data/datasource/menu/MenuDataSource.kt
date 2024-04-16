@@ -1,7 +1,7 @@
 package feature.data.datasource.menu
 
-import feature.data.model.Menu
+import feature.data.source.network.MenuResponse
 
 interface MenuDataSource {
-    fun getMenus():List<Menu>
+    suspend fun getMenus(categoryName: String? = null): MenuResponse
 }

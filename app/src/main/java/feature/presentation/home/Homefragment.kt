@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.FragmentHomeBinding
 import feature.data.datasource.category.CategoryApiDataSource
 import feature.data.datasource.category.CategoryDataSource
@@ -19,11 +21,10 @@ import feature.data.repository.MenuRepository
 import feature.data.repository.MenuRepositoryImpl
 import feature.data.source.network.SwiftiesFoodApiService
 import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.GridSpacingItemDecoration
 import feature.data.utils.proceedWhen
 import feature.presentation.detailfood.DetailFoodActivity
 import feature.presentation.home.adapter.CategoryListAdapter
-import feature.presentation.home.adapter.MenuListAdapter2
+import feature.presentation.home.adapter.MenuListAdapter
 
 
 class Homefragment : Fragment() {
@@ -31,9 +32,9 @@ class Homefragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
-   // private var isUsingGridMode: Boolean = false
+   private var isUsingGridMode: Boolean = true
 
-    //private var adapter:MenuListAdapter?=null
+    private var adapter:MenuListAdapter?=null
 
     private val viewModel:HomeViewModel by viewModels {
         val service = SwiftiesFoodApiService.invoke()
@@ -51,19 +52,14 @@ class Homefragment : Fragment() {
 
         }
     }
-    private val menuAdapter: MenuListAdapter2 by lazy {
-        MenuListAdapter2 {
-            DetailFoodActivity.startActivity(requireContext(),it)
-
-        }
-    }
 
 
     private fun getMenuData(categoryName: String? = null) {
         viewModel.getMenus(categoryName).observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
-                    it.payload?.let { data -> bindMenuList(data) }
+                    it.payload?.let { data -> bindMenuList(isUsingGridMode)
+                    }
                 }
             )
         }
@@ -80,13 +76,12 @@ class Homefragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListMenu()
         setupListCategory()
         getCategoryData()
         getMenuData(null)
         //bindCategoryList(viewModel.getCategories())
-        //bindMenuList(isUsingGridMode)
-        //setClickAction()
+        bindMenuList(isUsingGridMode)
+        setClickAction()
     }
 
     private fun getCategoryData() {
@@ -103,37 +98,28 @@ class Homefragment : Fragment() {
             adapter = categoryAdapter
         }
     }
-    private fun setupListMenu() {
-        val itemDecoration = GridSpacingItemDecoration(2, 12, true)
-        binding.rvMenuList.apply {
-            adapter = menuAdapter
-            addItemDecoration(itemDecoration)
-        }
-    }
     private fun bindCategoryList(data: List<Category>) {
         categoryAdapter.submitData(data)
     }
-    private fun bindMenuList(data: List<Menu>) {
-        menuAdapter.submitData(data)
-    }
-    /*
-    private fun bindMenuList(isUsingGrid: Boolean) {
-        val listMode = if (isUsingGrid) MenuListAdapter.MODE_GRID else MenuListAdapter.MODE_LIST
+    private fun bindMenuList(isUsingGrid: Boolean ) {
+        val listMode =
+            if (isUsingGrid) MenuListAdapter.MODE_GRID else MenuListAdapter.MODE_LIST
         adapter = MenuListAdapter(
             listMode = listMode,
             listener = object : MenuListAdapter.OnItemClickedListener<Menu> {
                 override fun onItemClicked(item: Menu) {
                     //navigate to detail
-                        DetailFoodActivity.startActivity(requireContext(),item)
+                    DetailFoodActivity.startActivity(requireContext(), item)
 
                 }
             })
         binding.rvMenuList.apply {
             adapter = this@Homefragment.adapter
-            layoutManager = GridLayoutManager(requireContext(), if (isUsingGrid) 2 else 1)
+            layoutManager =
+                GridLayoutManager(requireContext(), if (isUsingGrid) 2 else 1)
         }
-        adapter?.submitData(viewModel.getMenus())
     }
+
 
     private fun setClickAction() {
         binding.btnChangeListMode.setOnClickListener {
@@ -145,5 +131,5 @@ class Homefragment : Fragment() {
     private fun setButtonText(usingGridMode: Boolean) {
         val textResId = if (usingGridMode) R.string.text_list_mode else R.string.text_grid_mode
         binding.btnChangeListMode.setText(textResId)
-    }*/
+    }
 }

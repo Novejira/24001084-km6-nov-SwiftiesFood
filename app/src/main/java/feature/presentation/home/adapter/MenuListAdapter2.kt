@@ -1,16 +1,6 @@
 package feature.presentation.home.adapter
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.berkah.swiftiesfood.databinding.ItemMenuBinding
-import feature.data.model.Menu
-import feature.data.utils.toIndonesianFormat
-
-class MenuListAdapter2 (private val itemClick: (Menu) -> Unit) :
+class MenuListAdapter2 /* (private val itemClick: (Menu) -> Unit) :
     RecyclerView.Adapter<MenuListAdapter2.ItemMenuViewHolder>() {
 
     private val dataDiffer =
@@ -64,4 +54,4 @@ class MenuListAdapter2 (private val itemClick: (Menu) -> Unit) :
             }
         }
     }
-}
+}**///

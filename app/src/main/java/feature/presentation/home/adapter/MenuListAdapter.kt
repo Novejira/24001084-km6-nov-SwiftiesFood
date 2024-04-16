@@ -1,6 +1,18 @@
 package feature.presentation.home.adapter
 
-class MenuListAdapter /*(
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.berkah.swiftiesfood.databinding.ItemFoodGridBinding
+import com.berkah.swiftiesfood.databinding.ItemFoodListBinding
+import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodGridItemViewHolder
+import com.catnip.layoutingexample.presentation.foodlist.adapter.adapter.FoodListItemViewHolder
+import feature.base.ViewHolderBinder
+import feature.data.model.Menu
+
+class MenuListAdapter (
     private val listener : OnItemClickedListener<Menu>,
     private val listMode: Int = MODE_LIST
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -65,4 +77,3 @@ class MenuListAdapter /*(
         fun onItemClicked(item: T)
     }
 }
-**///

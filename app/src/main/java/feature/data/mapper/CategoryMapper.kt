@@ -1,7 +1,7 @@
 package feature.data.mapper
 
 import feature.data.model.Category
-import feature.data.source.network.CategoryItemResponse
+import feature.data.source.network.model.category.CategoryItemResponse
 
 fun CategoryItemResponse?.toCategory() =
     Category(

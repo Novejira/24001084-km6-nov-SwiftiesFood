@@ -1,7 +1,7 @@
 package feature.data.mapper
 
 import feature.data.model.Menu
-import feature.data.source.network.MenuItemResponse
+import feature.data.source.network.model.menu.MenuItemResponse
 
 fun MenuItemResponse?.toMenu() =
     Menu(

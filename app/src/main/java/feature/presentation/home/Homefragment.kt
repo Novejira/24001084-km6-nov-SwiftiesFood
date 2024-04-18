@@ -20,7 +20,7 @@ import feature.data.repository.CategoryRepository
 import feature.data.repository.CategoryRepositoryImpl
 import feature.data.repository.MenuRepository
 import feature.data.repository.MenuRepositoryImpl
-import feature.data.source.network.SwiftiesFoodApiService
+import feature.data.source.network.services.SwiftiesFoodApiService
 import feature.data.utils.GenericViewModelFactory
 import feature.data.utils.proceedWhen
 import feature.presentation.detailfood.DetailFoodActivity

@@ -1,4 +1,4 @@
-package feature.data.source.network
+package feature.data.source.network.model.category
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

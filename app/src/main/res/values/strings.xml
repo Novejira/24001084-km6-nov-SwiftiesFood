@@ -37,6 +37,9 @@
     <string name="text_input_email">lopeynope@gmail.com</string>
     <string name="text_edit">Edit</string>
     <string name="text_save">Save</string>
+    <string name="create_order_success">Create order Success</string>
+    <string name="close">Close</string>
+    <string name="error_checkout">Error Checkout</string>
 
 
 </resources>

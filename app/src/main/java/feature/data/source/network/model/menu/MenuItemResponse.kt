@@ -1,4 +1,4 @@
-package feature.data.source.network
+package feature.data.source.network.model.menu
 
 import com.google.gson.annotations.SerializedName
 

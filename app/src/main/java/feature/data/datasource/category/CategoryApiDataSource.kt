@@ -1,7 +1,7 @@
 package feature.data.datasource.category
 
-import feature.data.source.network.CategoriesResponse
-import feature.data.source.network.SwiftiesFoodApiService
+import feature.data.source.network.model.category.CategoriesResponse
+import feature.data.source.network.services.SwiftiesFoodApiService
 
 class CategoryApiDataSource (
     private val service: SwiftiesFoodApiService

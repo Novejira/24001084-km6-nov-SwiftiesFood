@@ -1,5 +1,6 @@
 package feature.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,9 +33,9 @@ class Homefragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
-   private var isUsingGridMode: Boolean = true
+    private lateinit var menuAdapter: MenuListAdapter
 
-    private var adapter:MenuListAdapter?=null
+    private var gridLayoutManager: GridLayoutManager? = null
 
     private val viewModel:HomeViewModel by viewModels {
         val service = SwiftiesFoodApiService.invoke()
@@ -58,7 +59,7 @@ class Homefragment : Fragment() {
         viewModel.getMenus(categoryName).observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
-                    it.payload?.let { data -> bindMenuList(isUsingGridMode)
+                    it.payload?.let { data -> bindMenu(data)
                     }
                 }
             )
@@ -76,12 +77,17 @@ class Homefragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListCategory()
+        setupRecyclerViews()
         getCategoryData()
-        getMenuData(null)
-        //bindCategoryList(viewModel.getCategories())
-        bindMenuList(isUsingGridMode)
         setClickAction()
+        getMenuData(null)
+        observeGridMode()
+    }
+    private fun observeGridMode() {
+        viewModel.isUsingGrid.observe(viewLifecycleOwner) {
+            setButtonText(it)
+            bindMenuList(it)
+        }
     }
 
     private fun getCategoryData() {
@@ -93,43 +99,53 @@ class Homefragment : Fragment() {
             )
         }
     }
-    private fun setupListCategory() {
-        binding.rvCategory.apply {
-            adapter = categoryAdapter
-        }
+
+    private fun setupRecyclerViews() {
+        binding.rvCategory.adapter = categoryAdapter
+        bindAdapterMenu()
     }
+
     private fun bindCategoryList(data: List<Category>) {
         categoryAdapter.submitData(data)
     }
     private fun bindMenuList(isUsingGrid: Boolean ) {
-        val listMode =
-            if (isUsingGrid) MenuListAdapter.MODE_GRID else MenuListAdapter.MODE_LIST
-        adapter = MenuListAdapter(
-            listMode = listMode,
-            listener = object : MenuListAdapter.OnItemClickedListener<Menu> {
-                override fun onItemClicked(item: Menu) {
-                    //navigate to detail
-                    DetailFoodActivity.startActivity(requireContext(), item)
+        val columnCount = if (isUsingGrid) 2 else 1
+        val listType = if (isUsingGrid) MenuListAdapter.MODE_GRID else MenuListAdapter.MODE_LIST
 
-                }
-            })
-        binding.rvMenuList.apply {
-            adapter = this@Homefragment.adapter
-            layoutManager =
-                GridLayoutManager(requireContext(), if (isUsingGrid) 2 else 1)
-        }
+        gridLayoutManager = GridLayoutManager(requireContext(), columnCount)
+        binding.rvMenuList.adapter = menuAdapter
+        binding.rvMenuList.layoutManager = gridLayoutManager
+        menuAdapter.listMode = listType
+        menuAdapter.notifyDataSetChanged()
     }
-
+    private fun bindAdapterMenu(){
+        val listType = if (viewModel.isUsingGrid.value == true) MenuListAdapter.MODE_GRID else MenuListAdapter.MODE_LIST
+        menuAdapter = MenuListAdapter(object : MenuListAdapter.OnItemClickedListener<Menu> {
+            override fun onItemClicked(item: Menu) {
+                navigateToDetail(item)
+            }
+        }, listType)
+    }
+    private fun changeListMode() {
+        viewModel.changeGridMode()
+    }
+    private fun bindMenu(data: List<Menu>) {
+        menuAdapter.submitData(data)
+    }
 
     private fun setClickAction() {
         binding.btnChangeListMode.setOnClickListener {
-            isUsingGridMode = !isUsingGridMode
-            setButtonText(isUsingGridMode)
-            bindMenuList(isUsingGridMode)
+           changeListMode()
         }
     }
     private fun setButtonText(usingGridMode: Boolean) {
         val textResId = if (usingGridMode) R.string.text_list_mode else R.string.text_grid_mode
         binding.btnChangeListMode.setText(textResId)
+    }
+    private fun navigateToDetail(item: Menu) {
+        val intent = Intent(requireContext(), DetailFoodActivity::class.java).apply {
+            putExtra(DetailFoodActivity.EXTRA_MENU, item)
+        }
+        startActivity(intent)
     }
 }

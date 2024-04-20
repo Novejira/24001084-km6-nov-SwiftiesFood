@@ -1,4 +1,4 @@
-package feature.home
+package feature.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -37,7 +37,7 @@ class Homefragment : Fragment() {
 
     private var gridLayoutManager: GridLayoutManager? = null
 
-    private val viewModel:HomeViewModel by viewModels {
+    private val viewModel: HomeViewModel by viewModels {
         val service = SwiftiesFoodApiService.invoke()
         val menuDataSource: MenuDataSource = MenuApiDataSource(service)
         val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource)

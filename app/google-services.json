@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027347214903",
+    "project_id": "swiftiesfood",
+    "storage_bucket": "swiftiesfood.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027347214903:android:09cdc8177e8ac3f86345b2",
+        "android_client_info": {
+          "package_name": "com.berkah.swiftiesfood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnqdQ9b-YsQ7tzSPSW94g8AruLgpqz6tc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

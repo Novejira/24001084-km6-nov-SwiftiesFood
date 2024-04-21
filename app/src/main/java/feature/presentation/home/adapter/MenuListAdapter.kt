@@ -14,15 +14,15 @@ import feature.data.model.Menu
 
 class MenuListAdapter (
     private val listener : OnItemClickedListener<Menu>,
-    private val listMode: Int = MODE_LIST
+    var listMode: Int = MODE_LIST
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object{
-        const val MODE_LIST = 0
-        const val MODE_GRID = 1
+        const val MODE_LIST = 1
+        const val MODE_GRID = 0
     }
 
-    private val dataDiffer =
+    private val asyncDataDiffer =
         AsyncListDiffer(
             this,
             object : DiffUtil.ItemCallback<Menu>() {
@@ -43,37 +43,33 @@ class MenuListAdapter (
         )
 
     fun submitData(data: List<Menu>) {
-        dataDiffer.submitList(data)
+        asyncDataDiffer.submitList(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        return if (listMode == MODE_GRID) FoodGridItemViewHolder(
-            ItemFoodGridBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),listener
-        ) else {
-            FoodListItemViewHolder(
-                ItemFoodListBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                ), listener
-            )
+        val inflater = LayoutInflater.from(parent.context)
+        return if (viewType == MODE_GRID) {
+            val binding = ItemFoodGridBinding.inflate(inflater, parent, false)
+            FoodGridItemViewHolder(binding, listener)
+        } else {
+            val binding = ItemFoodListBinding.inflate(inflater, parent, false)
+            FoodListItemViewHolder(binding, listener)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder !is ViewHolderBinder<*>) return
-        (holder as ViewHolderBinder<Menu>).bind(dataDiffer.currentList[position])
+        (holder as ViewHolderBinder<Menu>).bind(asyncDataDiffer.currentList[position])
     }
 
-    override fun getItemCount(): Int = dataDiffer.currentList.size
+    override fun getItemCount(): Int = asyncDataDiffer.currentList.size
 
 
     interface OnItemClickedListener<T>{
         fun onItemClicked(item: T)
     }
+    override fun getItemViewType(position: Int): Int {
+        return listMode
+    }
+
 }

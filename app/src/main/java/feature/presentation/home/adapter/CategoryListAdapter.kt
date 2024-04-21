@@ -52,12 +52,13 @@ class CategoryListAdapter(private val itemClick: (Category)->Unit):
     ) : RecyclerView.ViewHolder(binding.root){
 
         fun bindView( item: Category){
+            with(item){
             binding.ivCategoryImage.load(item.imgUrl){
                 crossfade(true)
             }
             binding.tvCategoryName.text = item.name
-            itemView.setOnClickListener { itemClick(item) }
+            itemView.setOnClickListener { itemClick(this) }
+            }
         }
     }
-
 }

@@ -16,7 +16,7 @@ class FoodGridItemViewHolder(
 
     override fun bind(item: Menu) {
         item.let {
-            binding.ivFoodPhoto.load(it.imgURL) {
+            binding.ivFoodPhoto.load(it.imgUrl) {
                 crossfade(true)
                 error(R.mipmap.ic_launcher)
             }

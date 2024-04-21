@@ -12,7 +12,6 @@
     <string name="text_add_to_cart">Add To Cart</string>
     <string name="text_username">Username</string>
     <string name="text_email">Email</string>
-    <string name="text_number_phone">Number Phone</string>
     <string name="text_profile">Profile</string>
     <string name="text_add_to_cart_success">Add to cart Success</string>
     <string name="add_to_cart_failed">Add to cart failed</string>
@@ -32,5 +31,34 @@
     <string name="text_hint_notes">Notes</string>
     <string name="text_cart_is_empty">Cart is Empty</string>
     <string name="text_okay">Okay</string>
+    <string name="text_name">Name</string>
+    <string name="text_input_name">Nope</string>
+    <string name="text_input_username">Nopejiraa</string>
+    <string name="text_input_email">lopeynope@gmail.com</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_save">Save</string>
+    <string name="create_order_success">Create order Success</string>
+    <string name="close">Close</string>
+    <string name="error_checkout">Error Checkout</string>
+    <string name="text_already_have_an_account_click_here">Already have an Account ? Login Here</string>
+    <string name="text_register">Register</string>
+    <string name="hint_name">Your name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="text_highlight_login_here">Login Here</string>
+    <string name="text_highlight_register">Register Here</string>
+    <string name="text_error_name_cannot_empty">Name cannot be empty</string>
+    <string name="text_error_email_empty">Email should not be empty</string>
+    <string name="text_error_email_invalid">Enter a valid format email</string>
+    <string name="text_error_password_empty">Password should not be empty</string>
+    <string name="text_error_password_less_than_8_char">Password cannot less than 8 character</string>
+    <string name="text_password_does_not_match">Password doesn\'t match</string>
+    <string name="text_log_in">Log in</string>
+    <string name="text_not_registered_yet_register_here">Not registered yet ? Register Here</string>
+    <string name="text_change_profile">Change Profile</string>
+    <string name="text_change_password">Change Password</string>
+    <string name="text_logout">Logout</string>
+
 
 </resources>

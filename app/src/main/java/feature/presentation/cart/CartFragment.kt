@@ -10,22 +10,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.FragmentCartBinding
+import com.google.firebase.auth.FirebaseAuth.getInstance
 import feature.checkout.CheckoutActivity
 import feature.data.datasource.cart.CartDataSource
 import feature.data.datasource.cart.CartDatabaseDataSource
 import feature.data.model.Cart
 import feature.data.repository.CartRepository
 import feature.data.repository.CartRepositoryImpl
+import feature.data.repository.UserRepositoryImpl
 import feature.data.source.local.database.AppDatabase
+import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
 import feature.data.utils.GenericViewModelFactory
 import feature.data.utils.hideKeyboard
 import feature.data.utils.proceedWhen
 import feature.data.utils.toIndonesianFormat
 import feature.presentation.common.CartListAdapter
 import feature.presentation.common.CartListener
+import feature.presentation.login.LoginActivity
 
 
 class CartFragment : Fragment() {
+
+    private var isLogin = false
 
     private lateinit var binding: FragmentCartBinding
 
@@ -33,7 +39,11 @@ class CartFragment : Fragment() {
         val db = AppDatabase.getInstance(requireContext())
         val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
         val rp: CartRepository = CartRepositoryImpl(ds)
-        GenericViewModelFactory.create(CartViewModel(rp))
+        val firebaseAuth = getInstance()
+        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
+        val repo = UserRepositoryImpl(dataSource)
+        GenericViewModelFactory.create(CartViewModel(rp,repo))
+
     }
 
     private val adapter: CartListAdapter by lazy {
@@ -76,8 +86,19 @@ class CartFragment : Fragment() {
 
     private fun setClickListeners() {
         binding.btnOrder.setOnClickListener {
-            startActivity(Intent(requireContext(), CheckoutActivity::class.java))
+            if (viewModel.isUserLoggedIn()) {
+                isLogin = true
+                navigateToCheckout()
+            } else {
+                navigateToLogin()
+            }
         }
+    }
+    private fun navigateToCheckout() {
+        startActivity(Intent(requireContext(), CheckoutActivity::class.java))
+    }
+    private fun navigateToLogin() {
+        startActivity(Intent(requireContext(), LoginActivity::class.java))
     }
 
     private fun observeData() {

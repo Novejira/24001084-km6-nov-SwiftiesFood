@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun userToMain() {
         lifecycleScope.launch {
-            delay(2000)
+            delay(3000)
             navigateToMain()
         }
     }

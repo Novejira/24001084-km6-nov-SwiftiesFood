@@ -7,8 +7,7 @@ fun CategoryItemResponse?.toCategory() =
     Category(
         name = this?.name.orEmpty(),
         imgUrl = this?.imgUrl.orEmpty(),
-        categoryDesc = ""
+        categoryDesc = "",
     )
 
-fun Collection<CategoryItemResponse>?.toCategories() =
-    this?.map { it.toCategory() } ?: listOf()
+fun Collection<CategoryItemResponse>?.toCategories() = this?.map { it.toCategory() } ?: listOf()

@@ -11,32 +11,34 @@ import feature.data.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface MenuRepository {
-    fun getMenus(categoryName : String? = null): Flow<ResultWrapper<List<Menu>>>
+    fun getMenus(categoryName: String? = null): Flow<ResultWrapper<List<Menu>>>
 
     fun createOrder(menus: List<Cart>): Flow<ResultWrapper<Boolean>>
-
 }
+
 class MenuRepositoryImpl(
-    private val dataSource: MenuDataSource
-): MenuRepository{
+    private val dataSource: MenuDataSource,
+) : MenuRepository {
     override fun getMenus(categoryName: String?): Flow<ResultWrapper<List<Menu>>> {
         return proceedFlow {
             dataSource.getMenus(categoryName).data.toMenus()
         }
-
     }
 
     override fun createOrder(menus: List<Cart>): Flow<ResultWrapper<Boolean>> {
         return proceedFlow {
-            dataSource.createOrder(CheckoutRequestPayload(
-                orders = menus.map {
-                    CheckoutItemPayload(
-                        notes = it.itemNotes,
-                        menuId = it.menuId.orEmpty(),
-                        quantity = it.itemQuantity
-                    )
-                }
-            )).status?:false
+            dataSource.createOrder(
+                CheckoutRequestPayload(
+                    orders =
+                        menus.map {
+                            CheckoutItemPayload(
+                                notes = it.itemNotes,
+                                menuId = it.menuId.orEmpty(),
+                                quantity = it.itemQuantity,
+                            )
+                        },
+                ),
+            ).status ?: false
         }
     }
 }

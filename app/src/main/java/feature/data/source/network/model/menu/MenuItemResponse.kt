@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class MenuItemResponse(
     @SerializedName("image_url")
-    val imgUrl : String?,
+    val imgUrl: String?,
     @SerializedName("nama")
-    val name : String?,
+    val name: String?,
     @SerializedName("harga_format")
-    val formattedprice : String?,
+    val formattedprice: String?,
     @SerializedName("harga")
-    val price : Double?,
+    val price: Double?,
     @SerializedName("detail")
-    val desc : String?,
+    val desc: String?,
     @SerializedName("alamat_resto")
-    val address : String?,
+    val address: String?,
 )

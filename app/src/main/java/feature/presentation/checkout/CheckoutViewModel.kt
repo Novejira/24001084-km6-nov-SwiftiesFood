@@ -9,25 +9,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CheckoutViewModel (
-
+class CheckoutViewModel(
     private val cartRepository: CartRepository,
-    private val menuRepository: MenuRepository
-): ViewModel(){
-
+    private val menuRepository: MenuRepository,
+) : ViewModel() {
     val checkoutData = cartRepository.getCheckoutData().asLiveData(Dispatchers.IO)
 
+    fun checkoutCart() =
+        menuRepository.createOrder(
+            checkoutData.value?.payload?.first.orEmpty(),
+        ).asLiveData(Dispatchers.IO)
 
-    fun checkoutCart() = menuRepository.createOrder(
-        checkoutData.value?.payload?.first.orEmpty()
-    ).asLiveData(Dispatchers.IO)
-
-    fun deleteAllCart(){
+    fun deleteAllCart() {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.deleteAll().collect()
         }
     }
 }
-
-
-

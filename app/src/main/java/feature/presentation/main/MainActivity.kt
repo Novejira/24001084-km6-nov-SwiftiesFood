@@ -18,10 +18,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
     private var isLogin = false
 
-    private val binding : ActivityMainBinding by lazy {
+    private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val viewModel: MainViewModel by viewModels {
@@ -35,20 +34,19 @@ class MainActivity : AppCompatActivity() {
         return MainViewModel(repo)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setUpBottomNav()
-        }
+    }
 
     private fun setUpBottomNav() {
-        val navController= findNavController(R.id.nav_host_fragment_activity_main)
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
         binding.navView.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener{controller, destination,arguments ->
-            when (destination.id){
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
                 R.id.menu_tab_profile -> {
-                    if(!isLogin){
+                    if (!isLogin) {
                         checkIfUserLogin()
                     }
                 }
@@ -57,8 +55,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(this,LoginActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
     }
+
     private fun checkIfUserLogin() {
         lifecycleScope.launch {
             delay(1000)
@@ -69,5 +68,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

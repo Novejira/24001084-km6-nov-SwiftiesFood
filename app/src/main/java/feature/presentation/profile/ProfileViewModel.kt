@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repo: UserRepository) : ViewModel() {
-
     private val _changePhotoResult = MutableLiveData<ResultWrapper<Boolean>>()
     val changePhotoResult: LiveData<ResultWrapper<Boolean>>
         get() = _changePhotoResult
@@ -31,6 +30,7 @@ class ProfileViewModel(private val repo: UserRepository) : ViewModel() {
             }
         }
     }
+
     fun updateFullName(fullName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.updateProfile(fullName = fullName).collect {

@@ -25,7 +25,6 @@ import feature.data.utils.proceedWhen
 import feature.presentation.login.LoginActivity
 
 class ProfileFragment : Fragment() {
-
     private lateinit var binding: FragmentProfileBinding
 
     private val viewModel: ProfileViewModel by viewModels {
@@ -44,14 +43,19 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        binding= FragmentProfileBinding.inflate(inflater,container,false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupForm()
         showUserData()
@@ -78,36 +82,41 @@ class ProfileFragment : Fragment() {
 
     private fun requestChangePassword() {
         viewModel.createChangePwdRequest()
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage("Change password request sended to your email : ${viewModel.getCurrentUser()?.email} Please check to your inbox or spam")
-            .setPositiveButton(
-                "Okay"
-            ) { dialog, id ->
-
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(
+                    "Change password request sended to your email : ${viewModel.getCurrentUser()?.email} Please check to your inbox or spam",
+                )
+                .setPositiveButton(
+                    "Okay",
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun doLogout() {
-        val dialog = AlertDialog.Builder(requireContext()).setMessage("Do you want to logout ?")
-            .setPositiveButton(
-                "Yes"
-            ) { dialog, id ->
-                viewModel.doLogout()
-                navigateToLogin()
-            }
-            .setNegativeButton(
-                "No"
-            ) { dialog, id ->
-                //no-op , do nothing
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext()).setMessage("Do you want to logout ?")
+                .setPositiveButton(
+                    "Yes",
+                ) { dialog, id ->
+                    viewModel.doLogout()
+                    navigateToLogin()
+                }
+                .setNegativeButton(
+                    "No",
+                ) { dialog, id ->
+                    // no-op , do nothing
+                }.create()
         dialog.show()
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        })
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            },
+        )
     }
 
     private fun changeProfileData() {
@@ -148,12 +157,11 @@ class ProfileFragment : Fragment() {
                     binding.pbLoading.isVisible = false
                     binding.btnChangeProfile.isVisible = true
                     Toast.makeText(requireContext(), "Change Profile data Failed !", Toast.LENGTH_SHORT).show()
-
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
                     binding.btnChangeProfile.isVisible = false
-                }
+                },
             )
         }
     }

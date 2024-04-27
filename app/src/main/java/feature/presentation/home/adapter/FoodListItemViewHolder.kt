@@ -11,7 +11,7 @@ import feature.presentation.home.adapter.MenuListAdapter
 
 class FoodListItemViewHolder(
     private val binding: ItemFoodListBinding,
-    private val listener: MenuListAdapter.OnItemClickedListener<Menu>
+    private val listener: MenuListAdapter.OnItemClickedListener<Menu>,
 ) : RecyclerView.ViewHolder(binding.root), ViewHolderBinder<Menu> {
     override fun bind(item: Menu) {
         item.let {

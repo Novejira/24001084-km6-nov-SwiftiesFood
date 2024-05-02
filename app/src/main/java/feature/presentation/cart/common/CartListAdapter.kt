@@ -1,4 +1,4 @@
-package feature.presentation.common
+package feature.presentation.cart.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,8 +11,8 @@ import com.berkah.swiftiesfood.databinding.ItemCartMenuBinding
 import com.berkah.swiftiesfood.databinding.ItemCartMenuOrderBinding
 import feature.base.ViewHolderBinder
 import feature.data.model.Cart
-import feature.data.utils.doneEditing
-import feature.data.utils.toIndonesianFormat
+import feature.utils.doneEditing
+import feature.utils.toIndonesianFormat
 
 class CartListAdapter(private val cartListener: CartListener? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

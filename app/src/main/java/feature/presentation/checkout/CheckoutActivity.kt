@@ -8,34 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ActivityCheckoutBinding
-import feature.data.datasource.cart.CartDataSource
-import feature.data.datasource.cart.CartDatabaseDataSource
-import feature.data.datasource.menu.MenuApiDataSource
-import feature.data.datasource.menu.MenuDataSource
 import feature.data.repository.CartRepository
-import feature.data.repository.CartRepositoryImpl
 import feature.data.repository.MenuRepository
-import feature.data.repository.MenuRepositoryImpl
-import feature.data.source.local.database.AppDatabase
-import feature.data.source.network.services.SwiftiesFoodApiService
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.proceedWhen
-import feature.data.utils.toIndonesianFormat
+import feature.presentation.cart.common.CartListAdapter
 import feature.presentation.checkout.adapter.PriceListAdapter
-import feature.presentation.common.CartListAdapter
+import feature.utils.GenericViewModelFactory
+import feature.utils.proceedWhen
+import feature.utils.toIndonesianFormat
+import org.koin.android.ext.android.inject
 
 class CheckoutActivity : AppCompatActivity() {
     private val binding: ActivityCheckoutBinding by lazy {
         ActivityCheckoutBinding.inflate(layoutInflater)
     }
+
     private val viewModel: CheckoutViewModel by viewModels {
-        val db = AppDatabase.getInstance(this)
-        val s = SwiftiesFoodApiService.invoke()
-        val pds: MenuDataSource = MenuApiDataSource(s)
-        val pr: MenuRepository = MenuRepositoryImpl(pds)
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        GenericViewModelFactory.create(CheckoutViewModel(rp, pr))
+        val cartRepository: CartRepository by inject()
+        val menuRepository: MenuRepository by inject()
+        GenericViewModelFactory.create(CheckoutViewModel(cartRepository, menuRepository))
     }
 
     private val adapter: CartListAdapter by lazy {

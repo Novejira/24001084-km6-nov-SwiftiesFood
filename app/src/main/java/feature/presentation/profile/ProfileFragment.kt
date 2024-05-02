@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.berkah.swiftiesfood.R
@@ -20,16 +19,14 @@ import com.berkah.swiftiesfood.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import feature.data.repository.UserRepositoryImpl
 import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.proceedWhen
 import feature.presentation.login.LoginActivity
+import feature.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
 
-    private val viewModel: ProfileViewModel by viewModels {
-        GenericViewModelFactory.create(createViewModel())
-    }
+    private val profileviewModel: ProfileViewModel by viewModel()
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -39,7 +36,7 @@ class ProfileFragment : Fragment() {
         }
 
     private fun changePhotoProfile(uri: Uri) {
-        viewModel.updateProfilePicture(uri)
+        profileviewModel.updateProfilePicture(uri)
     }
 
     override fun onCreateView(
@@ -81,11 +78,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun requestChangePassword() {
-        viewModel.createChangePwdRequest()
+        profileviewModel.createChangePwdRequest()
         val dialog =
             AlertDialog.Builder(requireContext())
                 .setMessage(
-                    "Change password request sended to your email : ${viewModel.getCurrentUser()?.email} Please check to your inbox or spam",
+                    "Change password request sended to your email : ${profileviewModel.getCurrentUser()?.email} Please check to your inbox or spam",
                 )
                 .setPositiveButton(
                     "Okay",
@@ -100,7 +97,7 @@ class ProfileFragment : Fragment() {
                 .setPositiveButton(
                     "Yes",
                 ) { dialog, id ->
-                    viewModel.doLogout()
+                    profileviewModel.doLogout()
                     navigateToLogin()
                 }
                 .setNegativeButton(
@@ -121,7 +118,7 @@ class ProfileFragment : Fragment() {
 
     private fun changeProfileData() {
         val fullName = binding.layoutForm.etName.text.toString().trim()
-        viewModel.updateFullName(fullName)
+        profileviewModel.updateFullName(fullName)
     }
 
     private fun checkNameValidation(): Boolean {
@@ -137,7 +134,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.changePhotoResult.observe(viewLifecycleOwner) {
+        profileviewModel.changePhotoResult.observe(viewLifecycleOwner) {
             it.proceedWhen(doOnSuccess = {
                 Toast.makeText(requireContext(), "Change Photo Profile Success !", Toast.LENGTH_SHORT).show()
                 showUserData()
@@ -146,7 +143,7 @@ class ProfileFragment : Fragment() {
                 showUserData()
             })
         }
-        viewModel.changeProfileResult.observe(viewLifecycleOwner) {
+        profileviewModel.changeProfileResult.observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -173,7 +170,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showUserData() {
-        viewModel.getCurrentUser()?.let {
+        profileviewModel.getCurrentUser()?.let {
             binding.layoutForm.etName.setText(it.fullName)
             binding.layoutForm.etEmail.setText(it.email)
             binding.ivProfilePict.load(it.photoUrl) {

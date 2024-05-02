@@ -4,36 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ActivityLoginBinding
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
-import feature.data.repository.UserRepositoryImpl
-import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.highLightWord
-import feature.data.utils.proceedWhen
 import feature.presentation.main.MainActivity
 import feature.presentation.register.RegisterActivity
+import feature.utils.highLightWord
+import feature.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: LoginViewModel by viewModels {
-        GenericViewModelFactory.create(createViewModel())
-    }
-
-    private fun createViewModel(): LoginViewModel {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
-        val repo = UserRepositoryImpl(dataSource)
-        return LoginViewModel(repo)
-    }
+    private val loginviewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeResult() {
-        viewModel.loginResult.observe(this) {
+        loginviewModel.loginResult.observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -104,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
         if (isFormValid()) {
             val email = binding.layoutForm.etEmail.text.toString().trim()
             val password = binding.layoutForm.etPassword.text.toString().trim()
-            viewModel.doLogin(email, password)
+            loginviewModel.doLogin(email, password)
         }
     }
 

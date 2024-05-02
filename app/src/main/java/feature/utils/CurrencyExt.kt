@@ -1,4 +1,4 @@
-package feature.data.utils
+package feature.utils
 
 import java.text.NumberFormat
 import java.util.Locale

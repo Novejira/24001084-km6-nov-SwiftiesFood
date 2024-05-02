@@ -1,4 +1,4 @@
-package feature.data.utils
+package feature.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

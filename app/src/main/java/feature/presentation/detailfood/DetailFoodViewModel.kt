@@ -8,7 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import feature.data.model.Menu
 import feature.data.repository.CartRepository
-import feature.data.utils.ResultWrapper
+import feature.utils.ResultWrapper
 import kotlinx.coroutines.Dispatchers
 
 class DetailFoodViewModel(

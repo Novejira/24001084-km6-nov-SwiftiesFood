@@ -6,8 +6,8 @@ import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ItemFoodGridBinding
 import feature.base.ViewHolderBinder
 import feature.data.model.Menu
-import feature.data.utils.toIndonesianFormat
 import feature.presentation.home.adapter.MenuListAdapter
+import feature.utils.toIndonesianFormat
 
 class FoodGridItemViewHolder(
     private val binding: ItemFoodGridBinding,

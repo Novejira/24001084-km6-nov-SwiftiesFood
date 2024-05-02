@@ -1,11 +1,18 @@
 package feature
 
 import android.app.Application
-import feature.data.source.local.database.AppDatabase
+import feature.DI.AppModules
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        AppDatabase.getInstance(this)
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(AppModules.modules)
+        }
     }
 }

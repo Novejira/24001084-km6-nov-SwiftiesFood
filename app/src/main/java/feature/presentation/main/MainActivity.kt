@@ -2,20 +2,16 @@ package feature.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ActivityMainBinding
-import com.google.firebase.auth.FirebaseAuth
-import feature.data.repository.UserRepositoryImpl
-import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
 import feature.presentation.login.LoginActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private var isLogin = false
@@ -23,16 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val viewModel: MainViewModel by viewModels {
-        GenericViewModelFactory.create(createViewModel())
-    }
 
-    private fun createViewModel(): MainViewModel {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
-        val repo = UserRepositoryImpl(dataSource)
-        return MainViewModel(repo)
-    }
+    private val mainviewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkIfUserLogin() {
         lifecycleScope.launch {
             delay(1000)
-            if (viewModel.isUserLoggedIn()) {
+            if (mainviewModel.isUserLoggedIn()) {
                 isLogin = true
             } else {
                 navigateToLogin()

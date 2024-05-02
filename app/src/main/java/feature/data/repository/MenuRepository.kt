@@ -6,8 +6,8 @@ import feature.data.model.Cart
 import feature.data.model.Menu
 import feature.data.source.network.model.checkout.CheckoutItemPayload
 import feature.data.source.network.model.checkout.CheckoutRequestPayload
-import feature.data.utils.ResultWrapper
-import feature.data.utils.proceedFlow
+import feature.utils.ResultWrapper
+import feature.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface MenuRepository {

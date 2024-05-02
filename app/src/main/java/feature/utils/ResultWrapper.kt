@@ -1,4 +1,4 @@
-package feature.data.utils
+package feature.utils
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

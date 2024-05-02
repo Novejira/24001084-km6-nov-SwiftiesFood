@@ -10,23 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.FragmentCartBinding
-import com.google.firebase.auth.FirebaseAuth.getInstance
 import feature.checkout.CheckoutActivity
-import feature.data.datasource.cart.CartDataSource
-import feature.data.datasource.cart.CartDatabaseDataSource
 import feature.data.model.Cart
 import feature.data.repository.CartRepository
-import feature.data.repository.CartRepositoryImpl
-import feature.data.repository.UserRepositoryImpl
-import feature.data.source.local.database.AppDatabase
-import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.hideKeyboard
-import feature.data.utils.proceedWhen
-import feature.data.utils.toIndonesianFormat
-import feature.presentation.common.CartListAdapter
-import feature.presentation.common.CartListener
+import feature.data.repository.UserRepository
+import feature.presentation.cart.common.CartListAdapter
+import feature.presentation.cart.common.CartListener
 import feature.presentation.login.LoginActivity
+import feature.utils.GenericViewModelFactory
+import feature.utils.hideKeyboard
+import feature.utils.proceedWhen
+import feature.utils.toIndonesianFormat
+import org.koin.android.ext.android.get
 
 class CartFragment : Fragment() {
     private var isLogin = false
@@ -34,12 +29,8 @@ class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
 
     private val viewModel: CartViewModel by viewModels {
-        val db = AppDatabase.getInstance(requireContext())
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        val firebaseAuth = getInstance()
-        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
-        val repo = UserRepositoryImpl(dataSource)
+        val rp: CartRepository = get()
+        val repo: UserRepository = get()
         GenericViewModelFactory.create(CartViewModel(rp, repo))
     }
 

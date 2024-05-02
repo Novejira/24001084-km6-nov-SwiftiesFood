@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.data.repository.UserRepository
-import feature.data.utils.ResultWrapper
+import feature.utils.ResultWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

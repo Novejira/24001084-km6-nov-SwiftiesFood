@@ -3,8 +3,8 @@ package feature.data.repository
 import feature.data.datasource.category.CategoryDataSource
 import feature.data.mapper.toCategories
 import feature.data.model.Category
-import feature.data.utils.ResultWrapper
-import feature.data.utils.proceedFlow
+import feature.utils.ResultWrapper
+import feature.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepository {

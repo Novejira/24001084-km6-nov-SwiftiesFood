@@ -1,4 +1,4 @@
-package feature.data.utils
+package feature.utils
 
 import android.content.Context
 import android.content.SharedPreferences

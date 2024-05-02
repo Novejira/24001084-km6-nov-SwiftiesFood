@@ -4,8 +4,8 @@ import android.net.Uri
 import feature.data.model.User
 import feature.data.model.toUser
 import feature.data.source.network.firebase.FirebaseAuthDataSource
-import feature.data.utils.ResultWrapper
-import feature.data.utils.proceedFlow
+import feature.utils.ResultWrapper
+import feature.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

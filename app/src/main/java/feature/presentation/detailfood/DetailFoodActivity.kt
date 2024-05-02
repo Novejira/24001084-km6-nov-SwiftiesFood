@@ -4,32 +4,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ActivityDetailFoodBinding
-import feature.data.datasource.cart.CartDataSource
-import feature.data.datasource.cart.CartDatabaseDataSource
 import feature.data.model.Menu
-import feature.data.repository.CartRepository
-import feature.data.repository.CartRepositoryImpl
-import feature.data.source.local.database.AppDatabase
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.proceedWhen
-import feature.data.utils.toIndonesianFormat
+import feature.utils.proceedWhen
+import feature.utils.toIndonesianFormat
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class DetailFoodActivity : AppCompatActivity() {
     private val binding: ActivityDetailFoodBinding by lazy {
         ActivityDetailFoodBinding.inflate(layoutInflater)
     }
-    private val viewModel: DetailFoodViewModel by viewModels {
-        val db = AppDatabase.getInstance(this)
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        GenericViewModelFactory.create(
-            DetailFoodViewModel(intent?.extras, rp),
-        )
+    private val viewModel: DetailFoodViewModel by viewModel {
+        parametersOf(intent.extras)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

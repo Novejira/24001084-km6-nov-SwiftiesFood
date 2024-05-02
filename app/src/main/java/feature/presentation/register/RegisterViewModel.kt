@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.data.repository.UserRepository
-import feature.data.utils.ResultWrapper
+import feature.utils.ResultWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -14,7 +14,11 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     val registerResult: LiveData<ResultWrapper<Boolean>>
         get() = _registerResult
 
-    fun doRegister(fullName: String, email: String, password: String) {
+    fun doRegister(
+        fullName: String,
+        email: String,
+        password: String,
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.doRegister(fullName, email, password).collect {
                 _registerResult.postValue(it)

@@ -6,12 +6,12 @@ import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ItemFoodListBinding
 import feature.base.ViewHolderBinder
 import feature.data.model.Menu
-import feature.data.utils.toIndonesianFormat
 import feature.presentation.home.adapter.MenuListAdapter
+import feature.utils.toIndonesianFormat
 
 class FoodListItemViewHolder(
     private val binding: ItemFoodListBinding,
-    private val listener: MenuListAdapter.OnItemClickedListener<Menu>
+    private val listener: MenuListAdapter.OnItemClickedListener<Menu>,
 ) : RecyclerView.ViewHolder(binding.root), ViewHolderBinder<Menu> {
     override fun bind(item: Menu) {
         item.let {

@@ -4,37 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.ActivityLoginBinding
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
-import feature.data.repository.UserRepositoryImpl
-import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.highLightWord
-import feature.data.utils.proceedWhen
 import feature.presentation.main.MainActivity
 import feature.presentation.register.RegisterActivity
+import feature.utils.highLightWord
+import feature.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
-
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: LoginViewModel by viewModels {
-        GenericViewModelFactory.create(createViewModel())
-    }
-
-    private fun createViewModel(): LoginViewModel {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
-        val repo = UserRepositoryImpl(dataSource)
-        return LoginViewModel(repo)
-    }
+    private val loginviewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeResult() {
-        viewModel.loginResult.observe(this) {
+        loginviewModel.loginResult.observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -65,21 +51,23 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(
                         this,
                         "Login Failed : ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
                     binding.btnLogin.isVisible = false
-                }
+                },
             )
         }
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        })
+        startActivity(
+            Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            },
+        )
     }
 
     private fun setClickListeners() {
@@ -92,16 +80,18 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToRegister() {
-        startActivity(Intent(this, RegisterActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        })
+        startActivity(
+            Intent(this, RegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 
     private fun doLogin() {
         if (isFormValid()) {
             val email = binding.layoutForm.etEmail.text.toString().trim()
             val password = binding.layoutForm.etPassword.text.toString().trim()
-            viewModel.doLogin(email, password)
+            loginviewModel.doLogin(email, password)
         }
     }
 
@@ -110,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.layoutForm.etPassword.text.toString().trim()
 
         return checkEmailValidation(email) &&
-                checkPasswordValidation(password, binding.layoutForm.tilPassword)
+            checkPasswordValidation(password, binding.layoutForm.tilPassword)
     }
 
     private fun checkEmailValidation(email: String): Boolean {
@@ -130,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkPasswordValidation(
         confirmPassword: String,
-        textInputLayout: TextInputLayout
+        textInputLayout: TextInputLayout,
     ): Boolean {
         return if (confirmPassword.isEmpty()) {
             textInputLayout.isErrorEnabled = true

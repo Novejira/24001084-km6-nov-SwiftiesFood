@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.berkah.swiftiesfood.R
@@ -20,17 +19,14 @@ import com.berkah.swiftiesfood.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import feature.data.repository.UserRepositoryImpl
 import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.proceedWhen
 import feature.presentation.login.LoginActivity
+import feature.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
-
     private lateinit var binding: FragmentProfileBinding
 
-    private val viewModel: ProfileViewModel by viewModels {
-        GenericViewModelFactory.create(createViewModel())
-    }
+    private val profileviewModel: ProfileViewModel by viewModel()
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -40,18 +36,23 @@ class ProfileFragment : Fragment() {
         }
 
     private fun changePhotoProfile(uri: Uri) {
-        viewModel.updateProfilePicture(uri)
+        profileviewModel.updateProfilePicture(uri)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        binding= FragmentProfileBinding.inflate(inflater,container,false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupForm()
         showUserData()
@@ -77,42 +78,47 @@ class ProfileFragment : Fragment() {
     }
 
     private fun requestChangePassword() {
-        viewModel.createChangePwdRequest()
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage("Change password request sended to your email : ${viewModel.getCurrentUser()?.email} Please check to your inbox or spam")
-            .setPositiveButton(
-                "Okay"
-            ) { dialog, id ->
-
-            }.create()
+        profileviewModel.createChangePwdRequest()
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(
+                    "Change password request sended to your email : ${profileviewModel.getCurrentUser()?.email} Please check to your inbox or spam",
+                )
+                .setPositiveButton(
+                    "Okay",
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun doLogout() {
-        val dialog = AlertDialog.Builder(requireContext()).setMessage("Do you want to logout ?")
-            .setPositiveButton(
-                "Yes"
-            ) { dialog, id ->
-                viewModel.doLogout()
-                navigateToLogin()
-            }
-            .setNegativeButton(
-                "No"
-            ) { dialog, id ->
-                //no-op , do nothing
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext()).setMessage("Do you want to logout ?")
+                .setPositiveButton(
+                    "Yes",
+                ) { dialog, id ->
+                    profileviewModel.doLogout()
+                    navigateToLogin()
+                }
+                .setNegativeButton(
+                    "No",
+                ) { dialog, id ->
+                    // no-op , do nothing
+                }.create()
         dialog.show()
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        })
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            },
+        )
     }
 
     private fun changeProfileData() {
         val fullName = binding.layoutForm.etName.text.toString().trim()
-        viewModel.updateFullName(fullName)
+        profileviewModel.updateFullName(fullName)
     }
 
     private fun checkNameValidation(): Boolean {
@@ -128,7 +134,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.changePhotoResult.observe(viewLifecycleOwner) {
+        profileviewModel.changePhotoResult.observe(viewLifecycleOwner) {
             it.proceedWhen(doOnSuccess = {
                 Toast.makeText(requireContext(), "Change Photo Profile Success !", Toast.LENGTH_SHORT).show()
                 showUserData()
@@ -137,7 +143,7 @@ class ProfileFragment : Fragment() {
                 showUserData()
             })
         }
-        viewModel.changeProfileResult.observe(viewLifecycleOwner) {
+        profileviewModel.changeProfileResult.observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -148,12 +154,11 @@ class ProfileFragment : Fragment() {
                     binding.pbLoading.isVisible = false
                     binding.btnChangeProfile.isVisible = true
                     Toast.makeText(requireContext(), "Change Profile data Failed !", Toast.LENGTH_SHORT).show()
-
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
                     binding.btnChangeProfile.isVisible = false
-                }
+                },
             )
         }
     }
@@ -165,7 +170,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showUserData() {
-        viewModel.getCurrentUser()?.let {
+        profileviewModel.getCurrentUser()?.let {
             binding.layoutForm.etName.setText(it.fullName)
             binding.layoutForm.etEmail.setText(it.email)
             binding.ivProfilePict.load(it.photoUrl) {

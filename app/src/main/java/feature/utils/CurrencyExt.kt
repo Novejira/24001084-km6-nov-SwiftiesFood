@@ -1,9 +1,12 @@
-package feature.data.utils
+package feature.utils
 
 import java.text.NumberFormat
 import java.util.Locale
 
-fun Double?.doubleToCurrency(language: String, country: String): String? {
+fun Double?.doubleToCurrency(
+    language: String,
+    country: String,
+): String? {
     return try {
         val localeID = Locale(language, country)
         val numberFormat = NumberFormat.getCurrencyInstance(localeID)
@@ -12,4 +15,5 @@ fun Double?.doubleToCurrency(language: String, country: String): String? {
         null
     }
 }
-fun Double?.toIndonesianFormat() = this.doubleToCurrency("in","ID")
+
+fun Double?.toIndonesianFormat() = this.doubleToCurrency("in", "ID")

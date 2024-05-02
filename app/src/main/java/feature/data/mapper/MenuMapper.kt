@@ -12,6 +12,7 @@ fun MenuItemResponse?.toMenu() =
         addres = this?.address.orEmpty(),
     )
 
-fun Collection<MenuItemResponse>?.toMenus() = this?.map {
-    it.toMenu()
-} ?: listOf()
+fun Collection<MenuItemResponse>?.toMenus() =
+    this?.map {
+        it.toMenu()
+    } ?: listOf()

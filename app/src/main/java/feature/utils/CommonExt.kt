@@ -1,4 +1,4 @@
-package feature.data.utils
+package feature.utils
 
 import android.app.Activity
 import android.content.Context
@@ -11,13 +11,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.Fragment
 
-
 val Number.toPx
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this.toFloat(),
-        Resources.getSystem().displayMetrics
-    )
+    get() =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics,
+        )
 
 fun AppCompatEditText.doneEditing(doneBlock: () -> Unit) {
     this.setOnEditorActionListener { _, actionId, event ->

@@ -10,66 +10,57 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.berkah.swiftiesfood.R
 import com.berkah.swiftiesfood.databinding.FragmentCartBinding
-import com.google.firebase.auth.FirebaseAuth.getInstance
 import feature.checkout.CheckoutActivity
-import feature.data.datasource.cart.CartDataSource
-import feature.data.datasource.cart.CartDatabaseDataSource
 import feature.data.model.Cart
 import feature.data.repository.CartRepository
-import feature.data.repository.CartRepositoryImpl
-import feature.data.repository.UserRepositoryImpl
-import feature.data.source.local.database.AppDatabase
-import feature.data.source.network.firebase.FirebaseAuthDataSourceImpl
-import feature.data.utils.GenericViewModelFactory
-import feature.data.utils.hideKeyboard
-import feature.data.utils.proceedWhen
-import feature.data.utils.toIndonesianFormat
-import feature.presentation.common.CartListAdapter
-import feature.presentation.common.CartListener
+import feature.data.repository.UserRepository
+import feature.presentation.cart.common.CartListAdapter
+import feature.presentation.cart.common.CartListener
 import feature.presentation.login.LoginActivity
-
+import feature.utils.GenericViewModelFactory
+import feature.utils.hideKeyboard
+import feature.utils.proceedWhen
+import feature.utils.toIndonesianFormat
+import org.koin.android.ext.android.get
 
 class CartFragment : Fragment() {
-
     private var isLogin = false
 
     private lateinit var binding: FragmentCartBinding
 
     private val viewModel: CartViewModel by viewModels {
-        val db = AppDatabase.getInstance(requireContext())
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        val firebaseAuth = getInstance()
-        val dataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
-        val repo = UserRepositoryImpl(dataSource)
-        GenericViewModelFactory.create(CartViewModel(rp,repo))
-
+        val rp: CartRepository = get()
+        val repo: UserRepository = get()
+        GenericViewModelFactory.create(CartViewModel(rp, repo))
     }
 
     private val adapter: CartListAdapter by lazy {
-        CartListAdapter(object : CartListener {
-            override fun onPlusTotalItemCartClicked(cart: Cart) {
-                viewModel.increaseCart(cart)
-            }
+        CartListAdapter(
+            object : CartListener {
+                override fun onPlusTotalItemCartClicked(cart: Cart) {
+                    viewModel.increaseCart(cart)
+                }
 
-            override fun onMinusTotalItemCartClicked(cart: Cart) {
-                viewModel.decreaseCart(cart)
-            }
+                override fun onMinusTotalItemCartClicked(cart: Cart) {
+                    viewModel.decreaseCart(cart)
+                }
 
-            override fun onRemoveCartClicked(cart: Cart) {
-                viewModel.removeCart(cart)
-            }
+                override fun onRemoveCartClicked(cart: Cart) {
+                    viewModel.removeCart(cart)
+                }
 
-            override fun onUserDoneEditingNotes(cart: Cart) {
-                viewModel.setCartNotes(cart)
-                hideKeyboard()
-            }
-        })
+                override fun onUserDoneEditingNotes(cart: Cart) {
+                    viewModel.setCartNotes(cart)
+                    hideKeyboard()
+                }
+            },
+        )
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
 
@@ -77,7 +68,10 @@ class CartFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupList()
         observeData()
@@ -94,9 +88,11 @@ class CartFragment : Fragment() {
             }
         }
     }
+
     private fun navigateToCheckout() {
         startActivity(Intent(requireContext(), CheckoutActivity::class.java))
     }
+
     private fun navigateToLogin() {
         startActivity(Intent(requireContext(), LoginActivity::class.java))
     }
@@ -116,7 +112,7 @@ class CartFragment : Fragment() {
                     binding.layoutState.tvError.isVisible = false
                     binding.rvCart.isVisible = true
                     result.payload?.let { (carts, totalPrice) ->
-                        //set list cart data
+                        // set list cart data
                         adapter.submitData(carts)
                         binding.tvTotalPrice.text = totalPrice.toIndonesianFormat()
                     }
@@ -137,7 +133,7 @@ class CartFragment : Fragment() {
                     result.payload?.let { (carts, totalPrice) ->
                         binding.tvTotalPrice.text = totalPrice.toIndonesianFormat()
                     }
-                }
+                },
             )
         }
     }
